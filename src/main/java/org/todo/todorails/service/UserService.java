@@ -24,12 +24,9 @@ public class UserService implements UserDetailsService {
     public User registerUser(User user) throws Exception {
 
         // Check if username already exists
-        /** TODO 8 (b): uncomment the method below checking for testing if a username exists **/
-        /*
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new Exception("Username already exists");
         }
-        */
 
         // Encrypt the password
         user.setPassword(passwordEncoder.encode(user.getPassword()));

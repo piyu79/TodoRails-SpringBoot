@@ -51,7 +51,7 @@
 
 
         <!-- Task Form, bound to Task model -->
-        <form action="/updatetask" method="post" th:object="${task}" class="task-form" onsubmit="return validateForm()">
+        <form th:action="@{/updatetask}" method="post" th:object="${task}" class="task-form" onsubmit="return validateForm()">
             <input type="hidden" id="id" th:field="*{id}">
 
             <label for="todoName">TODO Name</label>

@@ -54,7 +54,7 @@
 
 
         <!-- Task Form, bound to Task model -->
-        <form action="/addtask" method="post" th:object="${task}" class="task-form" onsubmit="return validateForm()">
+        <form th:action="@{/addtask}" method="post" th:object="${task}" class="task-form" onsubmit="return validateForm()">
             <!-- TODO Name -->
             <label for="todoName">TODO Name</label>
             <input type="text" id="todoName" th:field="*{title}" placeholder="Name here...">
@@ -63,10 +63,7 @@
             <!-- Description -->
             <label for="description">TODO Task Description</label>
 
-            <!-- TODO 9: add a placeholder="Enter task description" and
-                        make the size of the textarea have 5 rows
-            -->
-            <textarea id="description" th:field="*{description}" ></textarea>
+            <textarea id="description" th:field="*{description}" placeholder="Enter task description" rows="5"></textarea>
             <p class="error-message" id="descriptionError"></p>
 
             <!-- Priority -->

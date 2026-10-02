@@ -29,10 +29,7 @@ public class TaskController {
         // Fetch tasks due today for the current user
         List<Task> todayTasks = taskService.getTodayTasksForCurrentUser();
 
-        /** TODO 13 (a): add the list "todaysTask" object  to the "model"
-                         object with the attribute name "todaysTasks"
-                        using the method "addAttribute".
-         **/
+        model.addAttribute("todayTasks", todayTasks);
 
 
         // Fetch all tasks for the current user, sorted by due date
@@ -44,19 +41,11 @@ public class TaskController {
 
         LocalDateTime localDateTime = LocalDateTime.now();
         String formattedDate = DateTimeFormatter.ofPattern("MM/dd/yyyy").format(localDateTime);
-        /** TODO 14: send the "formattedDate" to the client with the attribute name "serverTime"
-         *           in the model
-         **/
+        model.addAttribute("serverTime", formattedDate);
 
 
-        /** TODO 20 (c): For the value of the attributes:
-         *                i. completedCount - replace 0 with a call to the method countByCompleted
-         *                                    of the taskService with the parameter true.
-         *                ii. pendingCount - replace 0 with a call to the method countByCompleted
-         *                                    of the taskService with the parameter false.
-         **/
-        model.addAttribute("completedCount", 0);
-        model.addAttribute("pendingCount",0);
+        model.addAttribute("completedCount", taskService.countByCompleted(true));
+        model.addAttribute("pendingCount", taskService.countByCompleted(false));
 
         return "dashboard";
     }
@@ -90,12 +79,12 @@ public class TaskController {
     @PostMapping("/addtask")
     public String saveTask(@ModelAttribute("task") Task task, Model model, RedirectAttributes redirectAttributes) {
         try {
-            /** TODO 11: call the "saveTask" method of the "taskService" to save the task object passed **/
+            taskService.saveTask(task);
 
             redirectAttributes.addFlashAttribute("successMessage", "Task added successfully!");
             return "redirect:/dashboard";
         } catch (Exception e) {
-            model.addAttribute("task", model);
+            model.addAttribute("task", task);
             redirectAttributes.addFlashAttribute("errorMessage", "Failed to add task. Please try again.");
             return "redirect:/addtask";
         }
@@ -156,13 +145,16 @@ public class TaskController {
     @PostMapping("/updatetask")
     public String updateTask(@ModelAttribute("task") Task task, RedirectAttributes redirectAttributes) {
         try {
-            taskService.updateTaskForUser(task);
-            redirectAttributes.addFlashAttribute("successMessage", "Task updated successfully!");
+            if (taskService.updateTaskForUser(task)) {
+                redirectAttributes.addFlashAttribute("successMessage", "Task updated successfully!");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Failed to update task. You may not have permission.");
+            }
             return "redirect:/dashboard";
         } catch (Exception e) {
             System.out.println("Error : " + e);
             redirectAttributes.addFlashAttribute("errorMessage", "Failed to update task. Please try again.");
-            return "redirect:/edittask";
+            return "redirect:/dashboard";
         }
     }
 

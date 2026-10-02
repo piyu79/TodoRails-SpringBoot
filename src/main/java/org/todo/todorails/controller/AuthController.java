@@ -49,7 +49,7 @@ public class AuthController {
         } catch(Exception e) {
 
             // if it is due to username already exists
-            if(e.getMessage().equalsIgnoreCase("Username already exists")) {
+            if("Username already exists".equalsIgnoreCase(e.getMessage())) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Registration unsuccessful due to existing username. Please try again.");
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "Registration unsuccessful. Please try again.");

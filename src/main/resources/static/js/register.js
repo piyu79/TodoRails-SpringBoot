@@ -3,11 +3,7 @@ function validateForm()  {
     // Initialize an array to store error messages
     const errors = [];
 
-    /** TODO 7: put try-catch around the code leaving aside the declaration of array "errors"
-     *          and the return statement at the end.
-     *          If there is an error the push the message "Error handling form fields!" and
-     *          return false.
-     **/
+    try {
         // Get form fields
         const username = document.getElementById("username").value.trim();
         const email = document.getElementById("email").value.trim();
@@ -59,7 +55,11 @@ function validateForm()  {
             // Prevent form submission
             return false;
         }
-
+    } catch (e) {
+        errors.push("Error handling form fields!");
+        displayClientErrors(errors);
+        return false;
+    }
 
     // No errors, allow form submission
     return true;
